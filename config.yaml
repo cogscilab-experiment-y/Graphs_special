@@ -1,0 +1,83 @@
+procedure_test: True
+randomize_trails: False
+
+screen_color: "#DDDDDD"
+text_color: black
+text_size: 28
+
+# stimulus
+stimulus_pos: [0, 0]
+stimulus_size: -1
+stimulus_time: 20
+answer_time: 10
+
+
+# fixation point
+fixation_size: 56
+fixation_color: red
+fixation_text: •
+fixation_time: -1 # 0 - doesn't show, -1 - shows all the
+fixation_pos: [0, 0]
+
+# answers
+answers_type: keyboard # mouse, keyboard, or text
+
+## for answers_type == mouse
+answer_size: 56
+answer_color: black
+answer_symbols: {1: 1, 2: 2, 3: 3} # key is real answer, value is presented symbol
+answer_pos: {1: [-100, -250], 2: [0, -250], 3: [100, -250]}
+answer_box_color: green
+answer_box_width: 6
+answer_box_size: 86
+answer_fill_color: darkgrey
+
+# for answers_type == keyboard
+reaction_keys: ["1", "2", "3"]
+
+# for answer_type == text
+text_box_pos: [0, -250]
+text_box_width: 110
+text_box_height: 60
+text_box_line_color: black
+text_box_line_width: 1
+text_box_fill_color: darkgrey
+
+text_box_text_size: 40
+text_box_text_color: black
+text_box_text_type: integer # integer, letters, custom
+text_box_accept_key: ["return"]
+text_box_max_elem: 4
+
+# if text_box_type == custom you can choose your on set of symbols
+text_box_symbols: []
+
+# show extra text during trial
+extra_text_to_show: [] # [{pos: [-270, -250], color: black, size: 40, text: "wprowadź odpowiedź:"},
+                       #  {pos: [450, -350], color: black, size: 30, text: "zatwierdź enter"}]
+
+# wait
+wait_time: 1.5
+wait_jitter: 1
+
+# feedback
+fdbk_training: True
+fdbk_experiment: False
+fdbk_correct: Poprawna odpowiedź
+fdbk_incorrect: Błędna odpowiedź
+fdbk_no_answer: Brak odpowiedzi
+fdbk_show_time: 2
+fdbk_color: black
+fdbk_size: 56
+
+# clock
+show_clock: false
+clock_pos: [450, 350]
+clock_size: 60
+clock_show_time: 7
+
+# timer
+show_timer: true
+timer_pos: [450, 350]
+timer_color: black
+timer_size: 40

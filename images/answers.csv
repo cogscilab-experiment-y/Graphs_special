@@ -1,0 +1,34 @@
+item_id,answer,item_type
+a,2,treining
+b,2,treining
+c,2,treining
+1,1,Direct
+2,2,Direct
+3,2,Direct
+4,3,Direct
+5,2,Direct
+6,3,Direct
+7,2,Direct
+8,2,Direct
+9,1,Direct
+10,2,Direct
+11,1,Indirect
+12,2,Indirect
+13,2,Indirect
+14,3,Indirect
+15,3,Indirect
+16,1,Indirect
+17,3,Indirect
+18,1,Indirect
+19,3,Indirect
+20,1,Indirect
+21,2,Indirect crossed
+22,1,Indirect crossed
+23,2,Indirect crossed
+24,3,Indirect crossed
+25,3,Indirect crossed
+26,3,Indirect crossed
+27,1,Indirect crossed
+28,2,Indirect crossed
+29,3,Indirect crossed
+30,3,Indirect crossed
