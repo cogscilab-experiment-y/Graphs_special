@@ -1,4 +1,4 @@
-procedure_test: True
+procedure_test: False
 randomize_trails: False
 
 screen_color: "#DDDDDD"
