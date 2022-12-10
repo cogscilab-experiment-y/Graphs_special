@@ -1,0 +1,1 @@
+C:\"Program Files"\PsychoPy\python.exe main.py
