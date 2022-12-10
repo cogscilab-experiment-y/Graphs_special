@@ -78,6 +78,6 @@ clock_show_time: 7
 
 # timer
 show_timer: true
-timer_pos: [450, 350]
+timer_pos: [600, 350]
 timer_color: black
-timer_size: 40
+timer_size: 60

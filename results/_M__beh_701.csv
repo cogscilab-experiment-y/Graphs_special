@@ -1,0 +1,6 @@
+n,block_type,rt,acc,stimulus,answer,correct_answer,item_type
+0,training,,-1,a.png,[],2,treining
+1,training,,-1,b.png,[],2,treining
+2,training,2.220867099997122,1,c.png,2,2,treining
+0,experiment,8.971416899992619,1,1.png,1,1,Direct
+1,experiment,5.471240000013495,1,2.png,2,2,Direct
