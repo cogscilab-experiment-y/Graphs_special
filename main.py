@@ -11,18 +11,34 @@ from code.load_data import load_config, load_images, prepare_block_stimulus
 from code.screen_misc import get_screen_res
 from code.show_info import part_info, show_info
 from code.check_exit import check_exit
+from code.triggers import TriggerHandler
 
 RESULTS = []
 PART_ID = ""
 
 
+class TriggerTypes(object):
+    GRAPH = 'graph'
+    NUMBERS = 'numbers'
+    ANSWER = 'answer'
+
+    @classmethod
+    def vals(cls):
+        return [value for name, value in vars(cls).items() if name.isupper()]
+
+
+TRIGGERS = TriggerHandler(TriggerTypes.vals(), trigger_params=['corr', 'trial_type', 'block_type'], trigger_time=0.003)
+
+
 @atexit.register
 def save_beh_results():
     num = random.randint(100, 999)
-    with open(join('results', '{}_beh_{}.csv'.format(PART_ID, num)), 'w', newline='') as beh_file:
+    file_name = f'_{PART_ID}_{num}.csv'
+    with open(join('results', "beh" + file_name), 'w', newline='') as beh_file:
         dict_writer = csv.DictWriter(beh_file, RESULTS[0].keys())
         dict_writer.writeheader()
         dict_writer.writerows(RESULTS)
+    TRIGGERS.save_to_file(join('results', 'triggermap' + file_name))
 
 
 def draw_stim_list(stim_list, flag):
@@ -69,6 +85,7 @@ def block(config, images, block_type, win, fixation, clock, screen_res, answers,
         reaction_time = None
         acc = -1
         n += 1
+        TRIGGERS.set_curr_trial_start()
 
         # fixation
         if config["fixation_time"] > 0:
@@ -78,9 +95,11 @@ def block(config, images, block_type, win, fixation, clock, screen_res, answers,
         win.callOnFlip(clock.reset)
         win.callOnFlip(event.clearEvents)
 
+        win.callOnFlip(TRIGGERS.send_trigger, TriggerTypes.GRAPH)
         show_stim(trial["stimulus_no_numbers"], config["stimulus_time"], clock, win)
         clock.reset()
 
+        win.callOnFlip(TRIGGERS.send_trigger, TriggerTypes.NUMBERS)
         # draw trial for answers_type == keyboard
         if config["answers_type"] == "keyboard":
             while clock.getTime() < config["answer_time"]:
@@ -91,6 +110,7 @@ def block(config, images, block_type, win, fixation, clock, screen_res, answers,
                 answer = event.getKeys(keyList=config["reaction_keys"])
                 if answer:
                     reaction_time = clock.getTime()
+                    TRIGGERS.send_trigger(TriggerTypes.ANSWER)
                     answer = answer[0]
                     break
                 check_exit()
@@ -106,6 +126,7 @@ def block(config, images, block_type, win, fixation, clock, screen_res, answers,
                 for k, ans_button in answers_buttons.items():
                     if mouse.isPressedIn(ans_button):
                         reaction_time = clock.getTime()
+                        TRIGGERS.send_trigger(TriggerTypes.ANSWER)
                         answer = str(k)
                         break
                     elif ans_button.contains(mouse):
@@ -137,6 +158,7 @@ def block(config, images, block_type, win, fixation, clock, screen_res, answers,
                     answer = answer[:-1]
                 elif event.getKeys(config["text_box_accept_key"]):
                     reaction_time = clock.getTime()
+                    TRIGGERS.send_trigger(TriggerTypes.ANSWER)
                     break
                 elif len(answer) < config["text_box_max_elem"]:
                     for letter in allowed_keys:
@@ -159,13 +181,16 @@ def block(config, images, block_type, win, fixation, clock, screen_res, answers,
         item_type = answers.loc[answers['item_id'] == trial["image_ID"]]['item_type'].iloc[0]
         if answer:
             acc = 1 if answer == correct_answer else 0
-        trial_results = {"n": n, "block_type": block_type,
-                         "rt": reaction_time, "acc": acc,
+        trial_results = {"n": n,
+                         "block_type": block_type,
+                         "rt": reaction_time,
+                         "acc": acc,
                          "stimulus": trial["image_name"],
                          "answer": answer,
                          "correct_answer": correct_answer,
                          "item_type": item_type}
         RESULTS.append(trial_results)
+        TRIGGERS.add_info_to_last_trigger(dict(block_type=block_type, acc=acc, stimulus=trial["image_name"]))
 
         if config[f"fdbk_{block_type}"]:
             show_stim(feedback[acc], config["fdbk_show_time"], clock, win)
